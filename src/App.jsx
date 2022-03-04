@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import Topbar from "./components/Topbar";
 import Signin from "./components/Signin";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Domain from "./pages/Domain";
+import Case from "./pages/Case";
+import NewCase from "./pages/NewCase";
+import Signup from "./pages/Signup";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -23,7 +28,9 @@ function App() {
   //   fetch();
   // }, []);
 
-  if (!isSignedIn) {
+  const routeParams = useLocation().pathname;
+  console.log(routeParams);
+  if (!isSignedIn && routeParams !== "/signup") {
     return (
       <div className="App w-screen h-screen overflow-hidden">
         <Topbar />
@@ -38,7 +45,13 @@ function App() {
     <div className="App w-screen h-screen overflow-hidden">
       <Topbar />
       <div className="w-full h-full pt-10 overflow-hidden">
-        <Dashboard />
+        <Routes>
+          <Route path="/" element={<Dashboard />} exact />
+          <Route path="/cases/new" element={<NewCase />} />
+          <Route path="/cases/:caseID" element={<Case />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/:domain" element={<Domain />} />
+        </Routes>
       </div>
     </div>
   );
