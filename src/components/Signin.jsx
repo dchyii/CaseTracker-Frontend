@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { forwardRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import SigninTest from "./SigninTest";
 
 const Signin = (props) => {
   const [isSignedIn, setIsSignedIn] = props.state;
+  const [message, setMessage] = useState("");
   const API_ENTRY = import.meta.env.VITE_API_ENTRY;
 
   /*  FORM SETUP */
@@ -27,8 +27,23 @@ const Signin = (props) => {
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: LOG_IN_SCHEMA,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(JSON.stringify(values));
+      try {
+        const serverResponse = await axios({
+          method: "post",
+          url: `${API_ENTRY}/token/`,
+          data: values,
+        });
+        console.log("return: ", serverResponse);
+        if (serverResponse.status === 200) {
+          localStorage.setItem("token", JSON.stringify(serverResponse.data));
+          setIsSignedIn(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setMessage(error.response.data.detail);
+      }
     },
   });
 
@@ -57,6 +72,7 @@ const Signin = (props) => {
               onBlur={formik.handleBlur}
               type="password"
             />
+            <p className="text-red-500">{message}</p>
             <button
               className="mt-8 text-base bg-black disabled:bg-gray-200 active:bg-gray-900 focus:outline-none text-white rounded px-4 py-1"
               type="submit"
