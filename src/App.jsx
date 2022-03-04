@@ -1,13 +1,12 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Dashboard from "./pages/Dashboard";
 import Topbar from "./components/Topbar";
 import Signin from "./components/Signin";
-import SigninTest from "./components/SigninTest";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState();
   const API_ENTRY = import.meta.env.VITE_API_ENTRY;
 
   // useEffect(() => {
@@ -29,7 +28,7 @@ function App() {
       <div className="App w-screen h-screen overflow-hidden">
         <Topbar />
         <div className="w-full h-full pt-10 overflow-hidden">
-          <Signin state={[isSignedIn, setIsSignedIn]} />
+          <Signin state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
         </div>
       </div>
     );
