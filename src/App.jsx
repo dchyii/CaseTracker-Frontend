@@ -4,6 +4,7 @@ import axios from "axios";
 import Dashboard from "./pages/Dashboard";
 import Topbar from "./components/Topbar";
 import Signin from "./components/Signin";
+import SigninTest from "./components/SigninTest";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -28,7 +29,7 @@ function App() {
       <div className="App w-screen h-screen overflow-hidden">
         <Topbar />
         <div className="w-full h-full pt-10 overflow-hidden">
-          <Signin />
+          <Signin state={[isSignedIn, setIsSignedIn]} />
         </div>
       </div>
     );
