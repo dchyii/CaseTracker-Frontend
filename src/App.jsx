@@ -9,6 +9,7 @@ import Case from "./pages/Case";
 import NewCase from "./pages/NewCase";
 import Signup from "./pages/Signup";
 import PrivateRoute from "./components/PrivateRoute";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -49,11 +50,13 @@ function App() {
         <Routes>
           <Route path="/" element={<PrivateRoute />} exact>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/cases/new" element={<NewCase />} />
             <Route path="/cases/:caseID" element={<Case />} />
-            <Route path="/:domain" element={<Domain />} />
+            <Route path="/domain/:domain" element={<Domain />} />
           </Route>
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
     </div>
