@@ -6,7 +6,7 @@ import * as Yup from "yup";
 
 const Signin = (props) => {
   const [isSignedIn, setIsSignedIn] = props.state;
-  const [user, setUser] = props.user;
+  // const [user, setUser] = props.user;
   const [message, setMessage] = useState("");
   const API_ENTRY = import.meta.env.VITE_API_ENTRY;
 
@@ -40,7 +40,7 @@ const Signin = (props) => {
         if (serverResponse.status === 200) {
           localStorage.setItem("token", JSON.stringify(serverResponse.data));
           setIsSignedIn(true);
-          setUser(jwt_decode(serverResponse.data.access));
+          // setUser(jwt_decode(serverResponse.data.access));
         }
       } catch (error) {
         console.log(error);
