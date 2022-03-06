@@ -3,18 +3,21 @@ import { useState } from "react";
 
 import React from "react";
 import Signin from "./Signin";
+import Sidebar from "./Sidebar";
 
 const PrivateComponent = ({ children }) => {
   return (
-    <>
-      <p className="border border-red-500">Sidebar</p>
-      <div className="border border-green-500">{<Outlet />}</div>
-    </>
+    <div className="w-full h-full flex">
+      <Sidebar />
+      <div className="w-full overflow-scroll border border-green-500">
+        {<Outlet />}
+      </div>
+    </div>
   );
 };
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
   console.log("private route");
   return isSignedIn ? (
     <PrivateComponent />
