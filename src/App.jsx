@@ -8,6 +8,7 @@ import Domain from "./pages/Domain";
 import Case from "./pages/Case";
 import NewCase from "./pages/NewCase";
 import Signup from "./pages/Signup";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -28,29 +29,31 @@ function App() {
   //   fetch();
   // }, []);
 
-  const routeParams = useLocation().pathname;
-  console.log(routeParams);
-  if (!isSignedIn && routeParams !== "/signup") {
-    return (
-      <div className="App w-screen h-screen overflow-hidden">
-        <Topbar />
-        <div className="w-full h-full pt-10 overflow-hidden">
-          <Signin state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
-        </div>
-      </div>
-    );
-  }
+  // const routeParams = useLocation().pathname;
+  // console.log(routeParams);
+  // if (!isSignedIn && routeParams !== "/signup") {
+  //   return (
+  //     <div className="App w-screen h-screen overflow-hidden">
+  //       <Topbar />
+  //       <div className="w-full h-full pt-10 overflow-hidden">
+  //         <Signin state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="App w-screen h-screen overflow-hidden">
       <Topbar />
       <div className="w-full h-full pt-10 overflow-hidden">
         <Routes>
-          <Route path="/" element={<Dashboard />} exact />
-          <Route path="/cases/new" element={<NewCase />} />
-          <Route path="/cases/:caseID" element={<Case />} />
+          <Route path="/" element={<PrivateRoute />} exact>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/cases/new" element={<NewCase />} />
+            <Route path="/cases/:caseID" element={<Case />} />
+            <Route path="/:domain" element={<Domain />} />
+          </Route>
           <Route path="/signup" element={<Signup />} />
-          <Route path="/:domain" element={<Domain />} />
         </Routes>
       </div>
     </div>
