@@ -8,7 +8,7 @@ import Domain from "./pages/Domain";
 import Case from "./pages/Case";
 import NewCase from "./pages/NewCase";
 import Signup from "./pages/Signup";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./utilities/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
 
 function App() {
