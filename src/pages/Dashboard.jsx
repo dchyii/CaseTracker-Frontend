@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 import axiosInstance from "../utilities/AxiosIntance";
+import DashboardSummary from "../components/DashboardSummary";
 
 const Dashboard = () => {
-  const API_ENTRY = import.meta.env.VITE_API_ENTRY;
+  // const API_ENTRY = import.meta.env.VITE_API_ENTRY;
   // const accessToken = JSON.parse(localStorage.getItem("token"))?.access;
   // console.log(accessToken);
 
@@ -37,8 +38,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Hello Dashboard</h1>
+    <div className="p-3">
+      <DashboardSummary />
     </div>
   );
 };
