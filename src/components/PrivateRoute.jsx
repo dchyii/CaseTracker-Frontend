@@ -17,7 +17,7 @@ const PrivateComponent = ({ children }) => {
 };
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const [isSignedIn, setIsSignedIn] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
   console.log("private route");
   return isSignedIn ? (
     <PrivateComponent />
