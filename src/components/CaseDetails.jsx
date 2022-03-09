@@ -6,6 +6,11 @@ import { useState } from "react";
 const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  const nextStepIndex =
+    props.details.steps.findIndex((step) => !step.completed_date) + 1;
+
+  const nextStep = props.details.steps[nextStepIndex];
+
   const expandBtn = isFocused ? (
     <path
       fillRule="evenodd"
@@ -26,9 +31,8 @@ const CaseDetails = (props) => {
 
   const submitBtnText = {
     vetting: "Submit for Vetting",
-    clearance1: "Submit for Clearance",
-    clearance2: "Submit for Clearance",
-    "pending approval": "Approved",
+    support1: "Submit for Clearance",
+    support2: "Submit for Clearance",
     completed: "Completed",
   };
 
@@ -57,9 +61,13 @@ const CaseDetails = (props) => {
           </p>
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3">
-            Current Milestone: <br />
-            {capsFirstLetter(props.details.current_status)} (To complete by:{" "}
-            {dayjs(props.details.current_status_due_date).format("DD/MM/YYYY")})
+            Current Milestone:{" "}
+            <span className="font-bold text-primary">
+              {capsFirstLetter(props.details.stage)}
+            </span>
+            <br />
+            (To complete by:{" "}
+            {dayjs(props.details.currentDeadline).format("DD/MM/YYYY")})
           </p>
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3 flex">
@@ -67,7 +75,7 @@ const CaseDetails = (props) => {
               className="btn btn-wide btn-success"
               onClick={() => setIsFocused(!isFocused)}
             >
-              {submitBtnText[props.details.next_step]}
+              {submitBtnText[nextStep.step]}
             </button>
           </p>
           <div
@@ -94,7 +102,7 @@ const CaseDetails = (props) => {
         <div className="divider font-semibold bg-secondary rounded-md h-1">
           <span className="px-10 bg-white">Details</span>
         </div>
-        {props.details.planning ? (
+        {/* {props.details.planning ? (
           <CaseDetailsBreakdown
             title={"Planning"}
             details={props.details.planning}
@@ -125,7 +133,7 @@ const CaseDetails = (props) => {
           />
         ) : (
           ""
-        )}
+        )} */}
       </div>
     </div>
   );

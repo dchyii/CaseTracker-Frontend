@@ -55,28 +55,29 @@ const Dashboard = () => {
     );
     console.log(filteredSteps);
     const stage = filteredSteps[0]?.stage;
-    item = { ...item, userSteps: filteredSteps, stage: stage };
+    const deadline = stage + "_deadline";
+    const currentDeadline = item[deadline];
+    item = {
+      ...item,
+      userSteps: filteredSteps,
+      stage: stage,
+      currentDeadline: currentDeadline,
+    };
     return item;
   });
   console.log("current cases: ", currentCases);
 
   const dueOneMonth = currentCases?.filter((item) => {
     const oneMonth = dayjs().add(1, "month");
-    const stage = item.stage;
-    const deadline = stage + "_deadline";
-    return dayjs(item[deadline]).isBefore(oneMonth, "day");
+    return dayjs(item.currentDeadline).isBefore(oneMonth, "day");
   });
   const dueTwoMonths = cases?.filter((item) => {
     const twoMonth = dayjs().add(2, "month");
-    const stage = item.stage;
-    const deadline = stage + "_deadline";
-    return dayjs(item[deadline]).isBefore(twoMonth, "day");
+    return dayjs(item.currentDeadline).isBefore(twoMonth, "day");
   });
   const dueThreeMonths = cases?.filter((item) => {
     const threeMonths = dayjs().add(1, "month");
-    const stage = item.stage;
-    const deadline = stage + "_deadline";
-    return dayjs(item[deadline]).isBefore(threeMonths, "day");
+    return dayjs(item.currentDeadline).isBefore(threeMonths, "day");
   });
 
   // number of cases //
@@ -87,8 +88,8 @@ const Dashboard = () => {
     threeMonths: dueThreeMonths?.length - dueTwoMonths?.length,
   };
 
-  const list = cases.map((item, index) => {
-    // return <CaseDetails key={index} details={item} />;
+  const list = currentCases.map((item, index) => {
+    return <CaseDetails key={index} details={item} />;
   });
 
   if (isLoading) {
