@@ -14,6 +14,19 @@ const fetchData = async () => {
   // }
 };
 
+const fetchDomainMembers = async () => {
+  try {
+    const response = await axiosInstance.get("/api/domain/members/");
+    const domainMembers = response?.data.map((member) => {
+      const user = { id: member.user.id, name: member.user.first_name };
+      return user;
+    });
+    localStorage.setItem("teammates", JSON.stringify(domainMembers));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Dashboard = () => {
   // const API_ENTRY = import.meta.env.VITE_API_ENTRY;
   // const accessToken = JSON.parse(localStorage.getItem("token"))?.access;
@@ -44,7 +57,13 @@ const Dashboard = () => {
 
   // fetch data //
   const { data, error, status } = useQuery("cases", fetchData);
+  const { memberData, memberError, memberStatus } = useQuery(
+    "members",
+    fetchDomainMembers
+  );
   console.log("query data: ", data);
+
+  // fetch domain members
 
   // filtering cases //
   const currentCases = data?.data.map((item) => {

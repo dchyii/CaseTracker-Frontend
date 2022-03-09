@@ -58,17 +58,18 @@ const CaseDetails = (props) => {
       tabIndex="0"
       className="collapse collapse-open border border-slate-300 rounded-md"
     >
-      <div
-        className="collapse-title font-medium"
-        onClick={() => {
-          console.log("clicked");
-          setIsFocused(!isFocused);
-        }}
-      >
-        <p className="text-2xl text-left w-full font-extrabold text-primary">
-          {props.details.title}
-          <span className="text-base"> (S${props.details.value})</span>
-        </p>
+      <div className="collapse-title font-medium">
+        <div
+          onClick={() => {
+            console.log("clicked");
+            setIsFocused(!isFocused);
+          }}
+        >
+          <p className="text-2xl text-left w-full font-extrabold text-primary">
+            {props.details.title}
+            <span className="text-base"> (S${props.details.value})</span>
+          </p>
+        </div>
         <div className="divider"></div>
         <div className="px-3 w-full text-left flex">
           <p className="w-1/3 px-3">
@@ -98,7 +99,6 @@ const CaseDetails = (props) => {
           <div
             className=" right-0 pr-3 pt-3 absolute"
             onClick={() => {
-              console.log("clicked");
               setIsFocused(!isFocused);
             }}
           >
