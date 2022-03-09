@@ -3,53 +3,54 @@ import axiosInstance from "../utilities/AxiosIntance";
 import DashboardSummary from "../components/DashboardSummary";
 import dayjs from "dayjs";
 import CaseDetails from "../components/CaseDetails";
+import { useQuery } from "react-query";
+
+const fetchData = async () => {
+  // try {
+  const response = await axiosInstance.get("/api/cases/");
+  return response;
+  // } catch (error) {
+  // console.log(error);
+  // }
+};
 
 const Dashboard = () => {
   // const API_ENTRY = import.meta.env.VITE_API_ENTRY;
   // const accessToken = JSON.parse(localStorage.getItem("token"))?.access;
   // console.log(accessToken);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [cases, setCases] = useState([]);
+  //! vvv current working codes vvv !//
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [cases, setCases] = useState([]);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        // let config = {
-        //   headers: {
-        //     "content-type": "application/json",
-        //     authorization: `Bearer ${accessToken}`,
-        //   },
-        //   data: {
-        //     userid: 2,
-        //   },
-        // };
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       const serverResponse = await axiosInstance.get("/api/cases/");
+  //       console.log("return: ", serverResponse);
+  //       const outstandingCases = serverResponse.data.filter(
+  //         (item) => item.current_status !== "completed"
+  //       );
+  //       setCases(outstandingCases);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-        // const serverResponse = await axios.get(
-        //   `${API_ENTRY}/api/dashboard/`,
-        //   config
-        // );
-        const serverResponse = await axiosInstance.get("/api/cases/");
-        console.log("return: ", serverResponse);
-        const outstandingCases = serverResponse.data.filter(
-          (item) => item.current_status !== "completed"
-        );
-        setCases(outstandingCases);
-        setIsLoading(false);
-        // return serverResponse;
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //   fetch();
+  // }, []);
+  //! ^^^ current working codes ^^^ !//
 
-    fetch();
-  }, []);
+  // fetch data //
+  const { data, error, status } = useQuery("cases", fetchData);
+  console.log("query data: ", data);
 
   // filtering cases //
-  const currentCases = cases?.map((item) => {
+  const currentCases = data?.data.map((item) => {
     const filteredSteps = item.steps.filter(
       (step) =>
-        step.res_party === cases[1].staffer &&
+        step.res_party === data.data[1].staffer &&
         !step.completed_date &&
         step.step !== "completed"
     );
@@ -71,11 +72,11 @@ const Dashboard = () => {
     const oneMonth = dayjs().add(1, "month");
     return dayjs(item.currentDeadline).isBefore(oneMonth, "day");
   });
-  const dueTwoMonths = cases?.filter((item) => {
+  const dueTwoMonths = data?.data.filter((item) => {
     const twoMonth = dayjs().add(2, "month");
     return dayjs(item.currentDeadline).isBefore(twoMonth, "day");
   });
-  const dueThreeMonths = cases?.filter((item) => {
+  const dueThreeMonths = data?.data.filter((item) => {
     const threeMonths = dayjs().add(1, "month");
     return dayjs(item.currentDeadline).isBefore(threeMonths, "day");
   });
@@ -88,17 +89,18 @@ const Dashboard = () => {
     threeMonths: dueThreeMonths?.length - dueTwoMonths?.length,
   };
 
-  const list = currentCases.map((item, index) => {
+  const list = currentCases?.map((item, index) => {
     return <CaseDetails key={index} details={item} />;
   });
 
-  if (isLoading) {
+  if (status !== "success") {
     return (
       <div className="hero min-h-screen bg-background">
         <div className="hero-content text-center">
           <div className="max-w-md">
             <span className="text-3xl font-extrabold text-primary">
-              loading...
+              {status === "loading" && "loading"}
+              {status === "error" && `error. ${error.message}`}
             </span>
           </div>
         </div>
