@@ -1,5 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
+import { capsFirstLetter } from "../utilities/functions";
 import CaseDetailsBreakdown from "./CaseDetailsBreakdown";
 import { useState } from "react";
 
@@ -24,10 +25,6 @@ const CaseDetails = (props) => {
       clipRule="evenodd"
     />
   );
-
-  const capsFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
 
   const submitBtnText = {
     vetting: "Submit for Vetting",
