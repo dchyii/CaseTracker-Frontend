@@ -29,7 +29,7 @@ const Dashboard = () => {
         //   `${API_ENTRY}/api/dashboard/`,
         //   config
         // );
-        const serverResponse = await axiosInstance.get("/api/dashboard/");
+        const serverResponse = await axiosInstance.get("/api/cases/");
         console.log("return: ", serverResponse);
         const outstandingCases = serverResponse.data.filter(
           (item) => item.current_status !== "completed"
@@ -46,29 +46,49 @@ const Dashboard = () => {
   }, []);
 
   // filtering cases //
-  const dueOneMonth = cases?.filter((item) => {
+  const currentCases = cases?.map((item) => {
+    const filteredSteps = item.steps.filter(
+      (step) =>
+        step.res_party === cases[1].staffer &&
+        !step.completed_date &&
+        step.step !== "completed"
+    );
+    console.log(filteredSteps);
+    const stage = filteredSteps[0]?.stage;
+    item = { ...item, userSteps: filteredSteps, stage: stage };
+    return item;
+  });
+  console.log("current cases: ", currentCases);
+
+  const dueOneMonth = currentCases?.filter((item) => {
     const oneMonth = dayjs().add(1, "month");
-    return dayjs(item.current_status_due_date).isBefore(oneMonth, "day");
+    const stage = item.stage;
+    const deadline = stage + "_deadline";
+    return dayjs(item[deadline]).isBefore(oneMonth, "day");
   });
   const dueTwoMonths = cases?.filter((item) => {
     const twoMonth = dayjs().add(2, "month");
-    return dayjs(item.current_status_due_date).isBefore(twoMonth, "day");
+    const stage = item.stage;
+    const deadline = stage + "_deadline";
+    return dayjs(item[deadline]).isBefore(twoMonth, "day");
   });
   const dueThreeMonths = cases?.filter((item) => {
     const threeMonths = dayjs().add(1, "month");
-    return dayjs(item.current_status_due_date).isBefore(threeMonths, "day");
+    const stage = item.stage;
+    const deadline = stage + "_deadline";
+    return dayjs(item[deadline]).isBefore(threeMonths, "day");
   });
 
   // number of cases //
   const numCases = {
-    total: cases?.length,
+    total: currentCases?.length,
     oneMonth: dueOneMonth?.length,
     twoMonths: dueTwoMonths?.length - dueOneMonth?.length,
     threeMonths: dueThreeMonths?.length - dueTwoMonths?.length,
   };
 
   const list = cases.map((item, index) => {
-    return <CaseDetails key={index} details={item} />;
+    // return <CaseDetails key={index} details={item} />;
   });
 
   if (isLoading) {

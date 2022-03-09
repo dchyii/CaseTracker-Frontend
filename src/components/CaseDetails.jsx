@@ -44,7 +44,7 @@ const CaseDetails = (props) => {
           setIsFocused(!isFocused);
         }}
       >
-        <p className="text-2xl text-left w-full">
+        <p className="text-2xl text-left w-full font-extrabold text-primary">
           {props.details.title}
           <span className="text-base"> (S${props.details.value})</span>
         </p>
@@ -94,7 +94,38 @@ const CaseDetails = (props) => {
         <div className="divider font-semibold bg-secondary rounded-md h-1">
           <span className="px-10 bg-white">Details</span>
         </div>
-        <CaseDetailsBreakdown details={props.details} />
+        {props.details.planning ? (
+          <CaseDetailsBreakdown
+            title={"Planning"}
+            details={props.details.planning}
+          />
+        ) : (
+          ""
+        )}
+        {props.details.bidding ? (
+          <CaseDetailsBreakdown
+            title={"Bidding"}
+            details={props.details.bidding}
+          />
+        ) : (
+          ""
+        )}
+        {props.details.approval ? (
+          <CaseDetailsBreakdown
+            title={"Approval"}
+            details={props.details.approval}
+          />
+        ) : (
+          ""
+        )}
+        {props.details.contracting ? (
+          <CaseDetailsBreakdown
+            title={"Contracting"}
+            details={props.details.contracting}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
