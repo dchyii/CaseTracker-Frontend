@@ -7,11 +7,30 @@ import { useState } from "react";
 const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  // Next Step Details //
   const nextStepIndex =
     props.details.steps.findIndex((step) => !step.completed_date) + 1;
 
   const nextStep = props.details.steps[nextStepIndex];
 
+  // Stages Details //
+  const planning = props.details.steps.filter(
+    (step) => step.stage === "planning"
+  );
+
+  const bidding = props.details.steps.filter(
+    (step) => step.stage === "bidding"
+  );
+
+  const approval = props.details.steps.filter(
+    (step) => step.stage === "approval"
+  );
+
+  const contracting = props.details.steps.filter(
+    (step) => step.stage === "contracting"
+  );
+
+  // UI Controller //
   const expandBtn = isFocused ? (
     <path
       fillRule="evenodd"
@@ -33,6 +52,7 @@ const CaseDetails = (props) => {
     completed: "Completed",
   };
 
+  // Render //
   return (
     <div
       tabIndex="0"
@@ -99,38 +119,26 @@ const CaseDetails = (props) => {
         <div className="divider font-semibold bg-secondary rounded-md h-1">
           <span className="px-10 bg-white">Details</span>
         </div>
-        {/* {props.details.planning ? (
-          <CaseDetailsBreakdown
-            title={"Planning"}
-            details={props.details.planning}
-          />
+        {planning.length !== 0 ? (
+          <CaseDetailsBreakdown title={"Planning"} details={planning} />
         ) : (
           ""
         )}
-        {props.details.bidding ? (
-          <CaseDetailsBreakdown
-            title={"Bidding"}
-            details={props.details.bidding}
-          />
+        {bidding.length !== 0 ? (
+          <CaseDetailsBreakdown title={"Bidding"} details={bidding} />
         ) : (
           ""
         )}
-        {props.details.approval ? (
-          <CaseDetailsBreakdown
-            title={"Approval"}
-            details={props.details.approval}
-          />
+        {approval.length !== 0 ? (
+          <CaseDetailsBreakdown title={"Approval"} details={approval} />
         ) : (
           ""
         )}
-        {props.details.contracting ? (
-          <CaseDetailsBreakdown
-            title={"Contracting"}
-            details={props.details.contracting}
-          />
+        {contracting.length !== 0 ? (
+          <CaseDetailsBreakdown title={"Contracting"} details={contracting} />
         ) : (
           ""
-        )} */}
+        )}
       </div>
     </div>
   );
