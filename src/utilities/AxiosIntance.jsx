@@ -7,7 +7,7 @@ const baseURL = import.meta.env.VITE_API_ENTRY;
 let authTokens = localStorage.getItem("token")
   ? JSON.parse(localStorage.getItem("token"))
   : null;
-console.log("auth token", authTokens);
+// console.log("auth token", authTokens);
 
 const axiosInstance = axios.create({
   baseURL,
@@ -18,9 +18,9 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (req) => {
-  console.log("interceptor ran!");
+  // console.log("interceptor ran!");
   if (!authTokens) {
-    console.log("!authTokens");
+    // console.log("!authTokens");
     authTokens = localStorage.getItem("token")
       ? JSON.parse(localStorage.getItem("token"))
       : null;
@@ -28,14 +28,14 @@ axiosInstance.interceptors.request.use(async (req) => {
   }
 
   const accessToken = jwtDecode(authTokens.access);
-  console.log(accessToken);
+  // console.log(accessToken);
   const isExpired = dayjs.unix(accessToken.exp).diff(dayjs()) < 1;
   if (!isExpired) return req;
 
   const response = await axios.post(`${baseURL}/token/refresh/`, {
     refresh: authTokens.refresh,
   });
-  console.log("refresh response: ", response);
+  // console.log("refresh response: ", response);
   localStorage.setItem("token", JSON.stringify(response.data));
   req.headers.Authorization = `Bearer ${response.data.access}`;
   return req;

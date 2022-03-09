@@ -10,9 +10,7 @@ const PrivateComponent = ({ children }) => {
   return (
     <div className="w-full h-full flex">
       <Sidebar />
-      <div className="w-full overflow-scroll border border-green-500">
-        {<Outlet />}
-      </div>
+      <div className="w-full overflow-scroll">{<Outlet />}</div>
     </div>
   );
 };

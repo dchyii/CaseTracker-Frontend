@@ -10,11 +10,14 @@ import NewCase from "./pages/NewCase";
 import Signup from "./pages/Signup";
 import PrivateRoute from "./utilities/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 function App() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [user, setUser] = useState();
-  const API_ENTRY = import.meta.env.VITE_API_ENTRY;
+  const queryClient = new QueryClient();
+  // const [isSignedIn, setIsSignedIn] = useState(false);
+  // const [user, setUser] = useState();
+  // const API_ENTRY = import.meta.env.VITE_API_ENTRY;
 
   // useEffect(() => {
   //   const fetch = async () => {
@@ -47,17 +50,20 @@ function App() {
     <div className="App w-screen h-screen overflow-hidden">
       <Topbar />
       <div className="w-full h-full pt-10 overflow-hidden">
-        <Routes>
-          <Route path="/" element={<PrivateRoute />} exact>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/cases/new" element={<NewCase />} />
-            <Route path="/cases/:caseID" element={<Case />} />
-            <Route path="/domain/:domain" element={<Domain />} />
-          </Route>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            <Route path="/" element={<PrivateRoute />} exact>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/cases/new" element={<NewCase />} />
+              <Route path="/cases/:caseID" element={<Case />} />
+              <Route path="/domain/:domain" element={<Domain />} />
+            </Route>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </div>
     </div>
   );
