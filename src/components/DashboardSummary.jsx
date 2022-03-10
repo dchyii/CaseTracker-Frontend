@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../utilities/PrivateRoute";
 import jwtDecode from "jwt-decode";
 import { capsFirstLetter } from "../utilities/functions";
 
 const DashboardSummary = (props) => {
-  const user = jwtDecode(JSON.parse(localStorage.getItem("token"))?.access);
+  // const user = localStorage.getItem("token")
+  //   ? jwtDecode(JSON.parse(localStorage.getItem("token"))?.access)
+  //   : { firstName: "", appointment: "", domain: "" };
+  const user = useContext(UserContext);
 
   return (
     <div className="stats shadow lg:w-10/12 mx-auto my-5 bg-background text-primary">
