@@ -9,7 +9,7 @@ const SideBarIcon = (props) => {
     Signout: <Signout />,
   };
   return (
-    <div className="sidebar-icon group">
+    <div className="sidebar-icon group" onClick={() => props.fn()}>
       {iconsList[props.icon]}
       <span className="sidebar-tooltip group-hover:scale-100">
         {props.name}

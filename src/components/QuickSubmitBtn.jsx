@@ -9,7 +9,6 @@ const QuickSubmitBtn = (props) => {
     ...props.submitStep,
     completed_date: dayjs().format("YYYY-MM-DD"),
   };
-  console.log("current step: ", submitData);
 
   // quick submit function //
   const queryClient = useQueryClient();
