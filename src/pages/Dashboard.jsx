@@ -107,14 +107,18 @@ const Dashboard = () => {
     return item;
   });
 
-  console.log("all user cases: ", allUserCases);
+  // console.log("all user cases: ", allUserCases);
 
   // filter for current user cases //
-  const currentCases = allUserCases?.filter((item) => {
+  const currentCasesUnsorted = allUserCases?.filter((item) => {
     return (
       item.currentResParty === user?.user_id || item.staffer === user?.user_id
     );
   });
+
+  const currentCases = currentCasesUnsorted?.sort((a, b) =>
+    dayjs(a.currentDeadline).diff(dayjs(b.currentDeadline))
+  );
 
   console.log("current user cases: ", currentCases);
 
@@ -139,8 +143,8 @@ const Dashboard = () => {
     threeMonths: dueThreeMonths?.length - dueTwoMonths?.length,
   };
 
-  const list = currentCases?.map((item, index) => {
-    return <CaseDetails key={index} details={item} />;
+  const list = currentCases?.map((item) => {
+    return <CaseDetails key={item.id} details={item} />;
   });
 
   if (status !== "success") {

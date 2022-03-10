@@ -3,8 +3,14 @@ import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useState, forwardRef } from "react";
 import { capsFirstLetter } from "../utilities/functions";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axiosInstance from "../utilities/AxiosIntance";
+import {
+  SubmitBtn,
+  SubmittingBtn,
+  ErrorBtn,
+  SuccessBtn,
+} from "./StepSubmitButton";
 
 const StepForm = (props) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,9 +21,22 @@ const StepForm = (props) => {
   ));
 
   // Update Status //
-  const submitUpdate = useMutation((updatedData) => {
-    return axiosInstance.put(`/api/steps/${props.details.id}/`, updatedData);
-  });
+  const queryClient = useQueryClient();
+  const submitUpdate = useMutation(
+    (updatedData) => {
+      return axiosInstance.put(`/api/steps/${props.details.id}/`, updatedData);
+    },
+    {
+      onSuccess: async () => {
+        console.log("async success");
+        queryClient.invalidateQueries("cases");
+        setTimeout(() => {
+          setIsEditing(false);
+          submitUpdate.reset();
+        }, 1000);
+      },
+    }
+  );
 
   // Edit button //
   const editButton = isEditing ? (
@@ -67,24 +86,15 @@ const StepForm = (props) => {
     },
   });
 
-  // Submit Button //
-  const submitBtn = (
-    <button type="submit">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8 mt-5 hover:text-success"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </button>
+  //   Submit Button //
+  const submitBtn = submitUpdate.isLoading ? (
+    <SubmittingBtn />
+  ) : submitUpdate.isError ? (
+    <ErrorBtn resetFn={submitUpdate.reset} />
+  ) : submitUpdate.isSuccess ? (
+    <SuccessBtn />
+  ) : (
+    <SubmitBtn submitFn={formik.handleSubmit} />
   );
 
   return (
@@ -94,7 +104,8 @@ const StepForm = (props) => {
         {editButton}
       </p>
 
-      <form className="flex" onSubmit={formik.handleSubmit}>
+      {/* <form className="flex" onSubmit={formik.handleSubmit}> */}
+      <form className="flex">
         <Field
           dot={true}
           label="Responsible Party"
@@ -120,19 +131,6 @@ const StepForm = (props) => {
         />
         {isEditing ? submitBtn : ""}
       </form>
-      <div>
-        {submitUpdate.isLoading ? (
-          <p>submitting</p>
-        ) : (
-          <>
-            {submitUpdate.isError ? (
-              <p>{submitUpdate.error.message}</p>
-            ) : (
-              <p>success!</p>
-            )}
-          </>
-        )}
-      </div>
     </div>
   );
 };

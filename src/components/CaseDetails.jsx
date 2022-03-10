@@ -8,10 +8,12 @@ const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
 
   // Next Step Details //
-  const nextStepIndex =
-    props?.details.steps.findIndex((step) => !step.completed_date) + 1;
+  const currentStepIndex = props?.details.steps.findIndex(
+    (step) => !step.completed_date
+  );
 
-  const nextStep = props?.details?.steps[nextStepIndex];
+  const currentStep = props?.details?.steps[currentStepIndex];
+  console.log("current step: ", currentStep);
 
   // Stages Details //
   const planning = props?.details?.steps.filter(
@@ -46,9 +48,10 @@ const CaseDetails = (props) => {
   );
 
   const submitBtnText = {
-    vetting: "Submit for Vetting",
-    support1: "Submit for Clearance",
-    support2: "Submit for Clearance",
+    drafting: "Submitted",
+    vetting: "Vetted",
+    support1: "Supported",
+    support2: "Supported",
     completed: "Completed",
   };
 
@@ -92,7 +95,7 @@ const CaseDetails = (props) => {
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3 flex">
             <button className="btn btn-wide btn-success">
-              {submitBtnText[nextStep?.step]}
+              {submitBtnText[currentStep?.step]}
             </button>
           </p>
           <div
