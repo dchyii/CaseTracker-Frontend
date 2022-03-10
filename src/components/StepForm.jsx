@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { useState, forwardRef } from "react";
 import { capsFirstLetter } from "../utilities/functions";
+import { useMutation } from "react-query";
+import axiosInstance from "../utilities/AxiosIntance";
 
 const StepForm = (props) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,6 +13,11 @@ const StepForm = (props) => {
       {member.name}
     </option>
   ));
+
+  // Update Status //
+  const submitUpdate = useMutation((updatedData) => {
+    return axiosInstance.put(`/api/steps/${props.details.id}/`, updatedData);
+  });
 
   // Edit button //
   const editButton = isEditing ? (
@@ -56,6 +63,7 @@ const StepForm = (props) => {
     initialValues: { ...props.details },
     onSubmit: (values) => {
       console.log("submitted:", values);
+      submitUpdate.mutate(values);
     },
   });
 
@@ -112,6 +120,19 @@ const StepForm = (props) => {
         />
         {isEditing ? submitBtn : ""}
       </form>
+      <div>
+        {submitUpdate.isLoading ? (
+          <p>submitting</p>
+        ) : (
+          <>
+            {submitUpdate.isError ? (
+              <p>{submitUpdate.error.message}</p>
+            ) : (
+              <p>success!</p>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

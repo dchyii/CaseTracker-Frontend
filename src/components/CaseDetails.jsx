@@ -9,25 +9,25 @@ const CaseDetails = (props) => {
 
   // Next Step Details //
   const nextStepIndex =
-    props.details.steps.findIndex((step) => !step.completed_date) + 1;
+    props?.details.steps.findIndex((step) => !step.completed_date) + 1;
 
-  const nextStep = props.details.steps[nextStepIndex];
+  const nextStep = props?.details?.steps[nextStepIndex];
 
   // Stages Details //
-  const planning = props.details.steps.filter(
-    (step) => step.stage === "planning"
+  const planning = props?.details?.steps.filter(
+    (step) => step?.stage === "planning"
   );
 
-  const bidding = props.details.steps.filter(
+  const bidding = props?.details?.steps.filter(
     (step) => step.stage === "bidding"
   );
 
-  const approval = props.details.steps.filter(
-    (step) => step.stage === "approval"
+  const approval = props?.details?.steps.filter(
+    (step) => step?.stage === "approval"
   );
 
-  const contracting = props.details.steps.filter(
-    (step) => step.stage === "contracting"
+  const contracting = props?.details?.steps.filter(
+    (step) => step?.stage === "contracting"
   );
 
   // UI Controller //
@@ -66,8 +66,8 @@ const CaseDetails = (props) => {
           }}
         >
           <p className="text-2xl text-left w-full font-extrabold text-primary">
-            {props.details.title}
-            <span className="text-base"> (S${props.details.value})</span>
+            {props?.details.title}
+            <span className="text-base"> (S${props?.details.value})</span>
           </p>
         </div>
         <div className="divider"></div>
@@ -75,25 +75,24 @@ const CaseDetails = (props) => {
           <p className="w-1/3 px-3">
             Folder Link:
             <br />
-            <a href={props.details.folder_link}>{props.details.folder_link}</a>
+            <a href={props?.details.folder_link}>
+              {props?.details.folder_link}
+            </a>
           </p>
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3">
             Current Milestone:{" "}
             <span className="font-bold text-primary">
-              {capsFirstLetter(props.details.stage)}
+              {capsFirstLetter(props?.details?.currentStage)}
             </span>
             <br />
             (To complete by:{" "}
-            {dayjs(props.details.currentDeadline).format("DD/MM/YYYY")})
+            {dayjs(props?.details?.currentDeadline).format("DD/MM/YYYY")})
           </p>
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3 flex">
-            <button
-              className="btn btn-wide btn-success"
-              onClick={() => setIsFocused(!isFocused)}
-            >
-              {submitBtnText[nextStep.step]}
+            <button className="btn btn-wide btn-success">
+              {submitBtnText[nextStep?.step]}
             </button>
           </p>
           <div

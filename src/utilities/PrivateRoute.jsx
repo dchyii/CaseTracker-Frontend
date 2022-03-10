@@ -1,5 +1,5 @@
 import { Outlet, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 
 import React from "react";
 import Signin from "../components/Signin";
@@ -7,6 +7,8 @@ import Sidebar from "../components/Sidebar";
 import jwtDecode from "jwt-decode";
 import dayjs from "dayjs";
 import axios from "axios";
+
+export const UserContext = createContext();
 
 const PrivateComponent = ({ children }) => {
   return (
@@ -20,6 +22,14 @@ const PrivateComponent = ({ children }) => {
 const PrivateRoute = ({ children, ...rest }) => {
   const baseURL = import.meta.env.VITE_API_ENTRY;
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    user_id: "",
+    username: "",
+    appointment: "",
+    domain: "",
+    firstName: "",
+    email: "",
+  });
 
   useEffect(() => {
     let authTokens = localStorage.getItem("token")
@@ -36,6 +46,7 @@ const PrivateRoute = ({ children, ...rest }) => {
       const accessIsExpired = dayjs.unix(accessToken.exp).diff(dayjs()) < 1;
       if (!accessIsExpired) {
         setIsSignedIn(true);
+        setUser(accessToken);
       } else {
         // check refresh token validty //
         const refreshIsExpired = dayjs.unix(refreshToken.exp).diff(dayjs()) < 1;
@@ -49,6 +60,7 @@ const PrivateRoute = ({ children, ...rest }) => {
               if (response.status === 200) {
                 localStorage.setItem("token", JSON.stringify(response.data));
                 setIsSignedIn(true);
+                setUser(jwtDecode(response.data.access));
               }
             } catch (error) {
               console.log(error);
@@ -61,9 +73,11 @@ const PrivateRoute = ({ children, ...rest }) => {
   }, []);
 
   return isSignedIn ? (
-    <PrivateComponent />
+    <UserContext.Provider value={user}>
+      <PrivateComponent />
+    </UserContext.Provider>
   ) : (
-    <Signin state={[isSignedIn, setIsSignedIn]} />
+    <Signin state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
   );
 };
 

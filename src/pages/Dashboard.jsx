@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axiosInstance from "../utilities/AxiosIntance";
 import DashboardSummary from "../components/DashboardSummary";
 import dayjs from "dayjs";
 import CaseDetails from "../components/CaseDetails";
 import { useQuery } from "react-query";
+import { UserContext } from "../utilities/PrivateRoute";
 
 const fetchData = async () => {
   // try {
@@ -54,48 +55,78 @@ const Dashboard = () => {
   //   fetch();
   // }, []);
   //! ^^^ current working codes ^^^ !//
-
+  const user = useContext(UserContext);
+  // console.log("user: ", user);
   // fetch data //
   const { data, error, status } = useQuery("cases", fetchData);
   const { memberData, memberError, memberStatus } = useQuery(
     "members",
     fetchDomainMembers
   );
-  console.log("query data: ", data);
-
-  // fetch domain members
+  // console.log("query data: ", data?.data);
 
   // filtering cases //
-  const currentCases = data?.data.map((item) => {
-    const filteredSteps = item.steps.filter(
-      (step) =>
-        step.res_party === data.data[1].staffer &&
-        !step.completed_date &&
-        step.step !== "completed"
+  //! vvv this works for staffer vvv !//
+  // const currentCases = data?.data.map((item) => {
+  //   const filteredSteps = item.steps.filter(
+  //     (step) =>
+  //       step.res_party === data.data[1].staffer &&
+  //       !step.completed_date &&
+  //       step.step !== "completed"
+  //   );
+  //   console.log(filteredSteps);
+  //   const stage = filteredSteps[0]?.stage;
+  //   const deadline = stage + "_deadline";
+  //   const currentDeadline = item[deadline];
+  //   item = {
+  //     ...item,
+  //     userSteps: filteredSteps,
+  //     stage: stage,
+  //     currentDeadline: currentDeadline,
+  //   };
+  //   return item;
+  // });
+  // console.log("current cases: ", currentCases);
+  //! ^^^ this works for staffer ^^^ !//
+
+  // populate cases info //
+  const allUserCases = data?.data.map((item) => {
+    const currentStageIndex = item.steps.findIndex(
+      (step) => !step.completed_date
     );
-    console.log(filteredSteps);
-    const stage = filteredSteps[0]?.stage;
-    const deadline = stage + "_deadline";
+    const currentStage = item.steps[currentStageIndex].stage;
+    const currentResParty = item.steps[currentStageIndex].res_party;
+    const deadline = currentStage + "_deadline";
     const currentDeadline = item[deadline];
     item = {
       ...item,
-      userSteps: filteredSteps,
-      stage: stage,
+      currentResParty: currentResParty,
+      currentStage: currentStage,
       currentDeadline: currentDeadline,
     };
     return item;
   });
-  console.log("current cases: ", currentCases);
+
+  console.log("all user cases: ", allUserCases);
+
+  // filter for current user cases //
+  const currentCases = allUserCases?.filter((item) => {
+    return (
+      item.currentResParty === user?.user_id || item.staffer === user?.user_id
+    );
+  });
+
+  console.log("current user cases: ", currentCases);
 
   const dueOneMonth = currentCases?.filter((item) => {
     const oneMonth = dayjs().add(1, "month");
     return dayjs(item.currentDeadline).isBefore(oneMonth, "day");
   });
-  const dueTwoMonths = data?.data.filter((item) => {
+  const dueTwoMonths = currentCases?.filter((item) => {
     const twoMonth = dayjs().add(2, "month");
     return dayjs(item.currentDeadline).isBefore(twoMonth, "day");
   });
-  const dueThreeMonths = data?.data.filter((item) => {
+  const dueThreeMonths = currentCases?.filter((item) => {
     const threeMonths = dayjs().add(1, "month");
     return dayjs(item.currentDeadline).isBefore(threeMonths, "day");
   });
