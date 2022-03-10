@@ -19,6 +19,9 @@ const QuickSubmitBtn = (props) => {
     {
       onSuccess: async () => {
         queryClient.invalidateQueries("cases");
+        setTimeout(() => {
+          submitUpdate.reset();
+        }, 1000);
       },
     }
   );
