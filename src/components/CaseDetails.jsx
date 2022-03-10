@@ -3,7 +3,11 @@ import dayjs from "dayjs";
 import { capsFirstLetter } from "../utilities/functions";
 import CaseDetailsBreakdown from "./CaseDetailsBreakdown";
 import { useState } from "react";
-import { SubmittingBtn, ErrorBtn, SuccessBtn } from "./StepSubmitButton";
+import {
+  SubmittingBtn,
+  ErrorBtn,
+  SuccessBtn,
+} from "../subcomponents/StepSubmitButton";
 import QuickSubmitBtn from "./QuickSubmitBtn";
 
 const CaseDetails = (props) => {

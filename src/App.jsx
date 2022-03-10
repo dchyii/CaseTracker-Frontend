@@ -56,6 +56,7 @@ function App() {
             <Route path="/" element={<PrivateRoute />} exact>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/cases" element={<Dashboard />} />
               <Route path="/cases/new" element={<NewCase />} />
               <Route path="/cases/:caseID" element={<Case />} />
               <Route path="/domain/:domain" element={<Domain />} />

@@ -10,7 +10,7 @@ import {
   SubmittingBtn,
   ErrorBtn,
   SuccessBtn,
-} from "./StepSubmitButton";
+} from "../subcomponents/StepSubmitButton";
 
 const StepForm = (props) => {
   const [isEditing, setIsEditing] = useState(false);

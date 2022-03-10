@@ -4,17 +4,14 @@ import jwtDecode from "jwt-decode";
 import { capsFirstLetter } from "../utilities/functions";
 
 const DashboardSummary = (props) => {
-  // const user = localStorage.getItem("token")
-  //   ? jwtDecode(JSON.parse(localStorage.getItem("token"))?.access)
-  //   : { firstName: "", appointment: "", domain: "" };
   const user = useContext(UserContext);
 
   return (
     <div className="stats shadow lg:w-10/12 mx-auto my-5 bg-background text-primary">
       <div className="stat place-items-center">
-        <div className="stat-value">{capsFirstLetter(user.firstName)}</div>
-        <div className="stat-title">{capsFirstLetter(user.appointment)}</div>
-        <div className="stat-title">{capsFirstLetter(user.domain)}</div>
+        <div className="stat-value">{capsFirstLetter(user?.firstName)}</div>
+        <div className="stat-title">{capsFirstLetter(user?.appointment)}</div>
+        <div className="stat-title">{capsFirstLetter(user?.domain)}</div>
       </div>
 
       <div className="stat place-items-center">
