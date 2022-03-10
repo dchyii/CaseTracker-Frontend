@@ -27,8 +27,8 @@ const CaseDetailsBreakdown = (props) => {
   );
 
   // Subcomponents //
-  const steps = props.details.map((step, index) => (
-    <StepForm key={index} details={step} members={domainMembers} />
+  const steps = props.details.map((step) => (
+    <StepForm key={step.id} details={step} members={domainMembers} />
   ));
 
   return (

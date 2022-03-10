@@ -3,31 +3,35 @@ import dayjs from "dayjs";
 import { capsFirstLetter } from "../utilities/functions";
 import CaseDetailsBreakdown from "./CaseDetailsBreakdown";
 import { useState } from "react";
+import { SubmittingBtn, ErrorBtn, SuccessBtn } from "./StepSubmitButton";
+import QuickSubmitBtn from "./QuickSubmitBtn";
 
 const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
 
   // Next Step Details //
-  const nextStepIndex =
-    props.details.steps.findIndex((step) => !step.completed_date) + 1;
-
-  const nextStep = props.details.steps[nextStepIndex];
-
-  // Stages Details //
-  const planning = props.details.steps.filter(
-    (step) => step.stage === "planning"
+  const currentStepIndex = props?.details.steps.findIndex(
+    (step) => !step.completed_date
   );
 
-  const bidding = props.details.steps.filter(
+  const currentStep = props?.details?.steps[currentStepIndex];
+  // console.log("current step: ", currentStep);
+
+  // Stages Details //
+  const planning = props?.details?.steps.filter(
+    (step) => step?.stage === "planning"
+  );
+
+  const bidding = props?.details?.steps.filter(
     (step) => step.stage === "bidding"
   );
 
-  const approval = props.details.steps.filter(
-    (step) => step.stage === "approval"
+  const approval = props?.details?.steps.filter(
+    (step) => step?.stage === "approval"
   );
 
-  const contracting = props.details.steps.filter(
-    (step) => step.stage === "contracting"
+  const contracting = props?.details?.steps.filter(
+    (step) => step?.stage === "contracting"
   );
 
   // UI Controller //
@@ -46,9 +50,10 @@ const CaseDetails = (props) => {
   );
 
   const submitBtnText = {
-    vetting: "Submit for Vetting",
-    support1: "Submit for Clearance",
-    support2: "Submit for Clearance",
+    drafting: "Submitted",
+    vetting: "Vetted",
+    support1: "Supported",
+    support2: "Supported",
     completed: "Completed",
   };
 
@@ -66,8 +71,8 @@ const CaseDetails = (props) => {
           }}
         >
           <p className="text-2xl text-left w-full font-extrabold text-primary">
-            {props.details.title}
-            <span className="text-base"> (S${props.details.value})</span>
+            {props?.details.title}
+            <span className="text-base"> (S${props?.details.value})</span>
           </p>
         </div>
         <div className="divider"></div>
@@ -75,27 +80,30 @@ const CaseDetails = (props) => {
           <p className="w-1/3 px-3">
             Folder Link:
             <br />
-            <a href={props.details.folder_link}>{props.details.folder_link}</a>
+            <a
+              href={props?.details.folder_link}
+              className="hover:underline hover:text-info"
+            >
+              {props?.details.folder_link}
+            </a>
           </p>
           <div className="divider divider-horizontal"></div>
           <p className="w-1/3 px-3">
             Current Milestone:{" "}
             <span className="font-bold text-primary">
-              {capsFirstLetter(props.details.stage)}
+              {capsFirstLetter(props?.details?.currentStage)}
             </span>
             <br />
             (To complete by:{" "}
-            {dayjs(props.details.currentDeadline).format("DD/MM/YYYY")})
+            {dayjs(props?.details?.currentDeadline).format("DD/MM/YYYY")})
           </p>
           <div className="divider divider-horizontal"></div>
-          <p className="w-1/3 px-3 flex">
-            <button
-              className="btn btn-wide btn-success"
-              onClick={() => setIsFocused(!isFocused)}
-            >
-              {submitBtnText[nextStep.step]}
-            </button>
-          </p>
+          <div className="w-1/3 px-3 flex">
+            <QuickSubmitBtn
+              text={submitBtnText[currentStep?.step]}
+              submitStep={currentStep}
+            />
+          </div>
           <div
             className=" right-0 pr-3 pt-3 absolute"
             onClick={() => {

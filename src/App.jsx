@@ -12,6 +12,7 @@ import PrivateRoute from "./utilities/PrivateRoute";
 import PageNotFound from "./pages/PageNotFound";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import Signout from "./pages/Signout";
 
 function App() {
   const queryClient = new QueryClient();
@@ -60,6 +61,7 @@ function App() {
               <Route path="/domain/:domain" element={<Domain />} />
             </Route>
             <Route path="/signup" element={<Signup />} />
+            <Route path="/signedout" element={<Signout />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <ReactQueryDevtools initialIsOpen={false} />

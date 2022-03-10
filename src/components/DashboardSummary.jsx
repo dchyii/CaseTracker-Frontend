@@ -3,10 +3,7 @@ import jwtDecode from "jwt-decode";
 import { capsFirstLetter } from "../utilities/functions";
 
 const DashboardSummary = (props) => {
-  const user = jwtDecode(JSON.parse(localStorage.getItem("token")).access);
-  //   console.log(user);
-  //   const username = user.username;
-  //   console.log("username: ", username);
+  const user = jwtDecode(JSON.parse(localStorage.getItem("token"))?.access);
 
   return (
     <div className="stats shadow lg:w-10/12 mx-auto my-5 bg-background text-primary">
