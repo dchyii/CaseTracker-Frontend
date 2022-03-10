@@ -129,7 +129,7 @@ const StepForm = (props) => {
           )}
           onChange={formik.handleChange}
         />
-        {isEditing ? submitBtn : ""}
+        {isEditing ? <div className="mt-12">{submitBtn}</div> : ""}
       </form>
     </div>
   );

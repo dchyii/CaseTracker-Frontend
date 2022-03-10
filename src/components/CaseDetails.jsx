@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { capsFirstLetter } from "../utilities/functions";
 import CaseDetailsBreakdown from "./CaseDetailsBreakdown";
 import { useState } from "react";
+import { SubmittingBtn, ErrorBtn, SuccessBtn } from "./StepSubmitButton";
+import QuickSubmitBtn from "./QuickSubmitBtn";
 
 const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -13,7 +15,7 @@ const CaseDetails = (props) => {
   );
 
   const currentStep = props?.details?.steps[currentStepIndex];
-  console.log("current step: ", currentStep);
+  // console.log("current step: ", currentStep);
 
   // Stages Details //
   const planning = props?.details?.steps.filter(
@@ -78,7 +80,10 @@ const CaseDetails = (props) => {
           <p className="w-1/3 px-3">
             Folder Link:
             <br />
-            <a href={props?.details.folder_link}>
+            <a
+              href={props?.details.folder_link}
+              className="hover:underline hover:text-info"
+            >
               {props?.details.folder_link}
             </a>
           </p>
@@ -93,11 +98,12 @@ const CaseDetails = (props) => {
             {dayjs(props?.details?.currentDeadline).format("DD/MM/YYYY")})
           </p>
           <div className="divider divider-horizontal"></div>
-          <p className="w-1/3 px-3 flex">
-            <button className="btn btn-wide btn-success">
-              {submitBtnText[currentStep?.step]}
-            </button>
-          </p>
+          <div className="w-1/3 px-3 flex">
+            <QuickSubmitBtn
+              text={submitBtnText[currentStep?.step]}
+              submitStep={currentStep}
+            />
+          </div>
           <div
             className=" right-0 pr-3 pt-3 absolute"
             onClick={() => {

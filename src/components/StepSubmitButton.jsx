@@ -8,7 +8,7 @@ export const SubmitBtn = (props) => {
         props.submitFn();
       }}
       type="button"
-      className="h-8 w-8 mt-12 hover:text-success"
+      className="h-8 w-8 hover:text-success"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@ export const SubmitBtn = (props) => {
 
 export const SubmittingBtn = () => {
   return (
-    <button onClick={(e) => e.preventDefault()} className="h-8 w-8 mt-6">
+    <button onClick={(e) => e.preventDefault()} className="h-8 w-8 -mt-6">
       <TailSpin ariaLabel="loading-indicator" />
     </button>
   );
@@ -38,7 +38,7 @@ export const SubmittingBtn = () => {
 export const ErrorBtn = (props) => {
   return (
     <button
-      className="h-8 w-8 mt-12 text-error"
+      className="h-8 w-8 text-error"
       onClick={(e) => {
         e.preventDefault();
         props.resetFn();
@@ -66,7 +66,7 @@ export const SuccessBtn = () => {
   return (
     <button
       onClick={(e) => e.preventDefault()}
-      className="h-8 w-8 mt-12 text-success"
+      className="h-8 w-8 text-success"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
