@@ -30,7 +30,7 @@ export const SubmitBtn = (props) => {
 export const SubmittingBtn = () => {
   return (
     <button onClick={(e) => e.preventDefault()} className="h-8 w-8 -mt-6">
-      <TailSpin ariaLabel="loading-indicator" />
+      <TailSpin ariaLabel="loading-indicator" color="#2b6777" />
     </button>
   );
 };
