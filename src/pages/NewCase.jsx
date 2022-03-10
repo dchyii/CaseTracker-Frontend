@@ -13,16 +13,12 @@ const NewCase = () => {
   const renderedComponent = !caseDetails ? (
     <NewCaseDetails caseDetails={[caseDetails, setCaseDetails]} />
   ) : (
-    <p>case details completed</p>
+    <NewStepsDetails caseDetails={caseDetails} stepsDetails={stepsDetails} />
   );
 
   console.log("case details", caseDetails);
   // return <div className="p-3">{renderedComponent}</div>;
-  return (
-    <div className="p-3">
-      <NewStepsDetails caseDetails={caseDetails} stepsDetails={stepsDetails} />
-    </div>
-  );
+  return <div className="p-3">{renderedComponent}</div>;
 };
 
 export default NewCase;
