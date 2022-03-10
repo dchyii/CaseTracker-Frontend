@@ -43,7 +43,7 @@ axiosInstance.interceptors.request.use(async (req) => {
       return req;
     }
   } else {
-    throw new axios.Cancel("Invalid credentials. Please sign in,");
+    throw new axios.Cancel("Invalid credentials. Please sign in.");
   }
 });
 
