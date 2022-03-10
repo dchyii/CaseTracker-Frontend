@@ -19,26 +19,32 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (req) => {
   // console.log("interceptor ran!");
-  if (!authTokens) {
-    // console.log("!authTokens");
-    authTokens = localStorage.getItem("token")
-      ? JSON.parse(localStorage.getItem("token"))
-      : null;
-    req.headers.Authorization = `Bearer ${authTokens?.access}`;
+  authTokens = localStorage.getItem("token")
+    ? JSON.parse(localStorage.getItem("token"))
+    : null;
+  if (authTokens) {
+    // console.log("token exist");
+    const accessToken = jwtDecode(authTokens.access);
+    const isExpired = dayjs.unix(accessToken.exp).diff(dayjs()) < 1;
+    if (!isExpired) {
+      // console.log("access token:", accessToken);
+      req.headers.Authorization = `Bearer ${authTokens.access}`;
+      // console.log(req);
+      return req;
+    }
+    const refreshToken = jwtDecode(authTokens.refresh);
+    const refreshIsExpired = dayjs.unix(refreshToken.exp).diff(dayjs()) < 1;
+    if (!refreshIsExpired) {
+      const response = await axios.post(`${baseURL}/token/refresh/`, {
+        refresh: authTokens.refresh,
+      });
+      localStorage.setItem("token", JSON.stringify(response.data));
+      req.headers.Authorization = `Bearer ${response.data.access}`;
+      return req;
+    }
+  } else {
+    throw new axios.Cancel("Invalid credentials. Please sign in,");
   }
-
-  const accessToken = jwtDecode(authTokens.access);
-  // console.log(accessToken);
-  const isExpired = dayjs.unix(accessToken.exp).diff(dayjs()) < 1;
-  if (!isExpired) return req;
-
-  const response = await axios.post(`${baseURL}/token/refresh/`, {
-    refresh: authTokens.refresh,
-  });
-  // console.log("refresh response: ", response);
-  localStorage.setItem("token", JSON.stringify(response.data));
-  req.headers.Authorization = `Bearer ${response.data.access}`;
-  return req;
 });
 
 export default axiosInstance;
