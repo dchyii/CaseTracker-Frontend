@@ -1,11 +1,14 @@
 import React from "react";
 import SideBarIcon from "../subcomponents/SideBarIcon";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const signOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("teammates");
     console.log("sign out");
+    navigate("/signedout");
   };
 
   return (
