@@ -83,7 +83,7 @@ const Signin = (props) => {
               )}
             </div>
             <button
-              className="mt-8 text-base bg-black disabled:bg-gray-200 active:bg-gray-900 focus:outline-none text-white rounded px-4 py-1"
+              className="mt-8 text-white bg-primary disabled:bg-gray-200 active:bg-accent focus:outline-none rounded px-4 py-1"
               type="submit"
               disabled={!(formik.isValid && formik.dirty)}
             >

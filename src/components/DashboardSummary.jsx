@@ -4,9 +4,6 @@ import jwtDecode from "jwt-decode";
 import { capsFirstLetter } from "../utilities/functions";
 
 const DashboardSummary = (props) => {
-  // const user = localStorage.getItem("token")
-  //   ? jwtDecode(JSON.parse(localStorage.getItem("token"))?.access)
-  //   : { firstName: "", appointment: "", domain: "" };
   const user = useContext(UserContext);
 
   return (
