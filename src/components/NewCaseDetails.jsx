@@ -1,4 +1,4 @@
-import React, { useContext, forwardRef } from "react";
+import React, { useContext, forwardRef, useState } from "react";
 import { UserContext } from "../utilities/PrivateRoute";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -6,6 +6,7 @@ import * as Yup from "yup";
 const NewCaseDetails = (props) => {
   const user = useContext(UserContext);
   const [caseDetails, setCaseDetails] = props.caseDetails;
+  const [applicableStages, setApplicableStages] = props.applicableStages;
   //   console.log(user);
 
   // Formik Setup //
@@ -33,7 +34,7 @@ const NewCaseDetails = (props) => {
       .required("Required"),
     need_by_date: Yup.date().required("Required").typeError("Required"),
     folder_link: Yup.string().url().required("Required"),
-    purchase_type: Yup.string().nullable(),
+    purchase_type: Yup.string().required("Required"),
     planning_deadline: Yup.date()
       .nullable()
       .when("purchase_type", {
@@ -117,7 +118,7 @@ const NewCaseDetails = (props) => {
         title: values.title,
         value: values.value,
         folder_link: values.folder_link,
-        purchase_type: !values.purchase_type ? null : values.purchase_type,
+        purchase_type: values.purchase_type,
         planning_deadline:
           values.purchase_type === "D" || values.purchase_type === "L"
             ? values.planning_deadline
@@ -132,17 +133,29 @@ const NewCaseDetails = (props) => {
         approval_deadline: !values.approval_type
           ? null
           : values.approval_deadline,
-        contracting_type: !values.contracting_type
-          ? null
-          : values.contracting_type,
-        contracting_deadline: !values.contracting_type
-          ? null
-          : values.approval_deadline,
+        contracting_type: values.contracting_type,
+        contracting_deadline: values.contracting_deadline,
         need_by_date: values.need_by_date,
         staffer: user?.user_id,
         current_res_party: user?.user_id,
       };
       console.log("cleaned: ", submittedValues);
+      const stages = {
+        planning:
+          values.purchase_type === "D" || values.purchase_type === "L"
+            ? true
+            : false,
+        bidding:
+          values.purchase_type === "D" ||
+          values.purchase_type === "L" ||
+          values.purchase_type === "O"
+            ? true
+            : false,
+        approval: values.approval_type ? true : false,
+        contracting: true,
+      };
+      console.log(stages);
+      setApplicableStages(stages);
       setCaseDetails(submittedValues);
     },
   });
@@ -206,7 +219,7 @@ const NewCaseDetails = (props) => {
         <div className="w-full flex border border-slate-300 rounded-lg my-3">
           <div className="w-1/2">
             <Field
-              dot={false}
+              dot={true}
               error={
                 formik.touched?.purchase_type && formik.errors?.purchase_type
               }
