@@ -2,7 +2,11 @@ import React from "react";
 import dayjs from "dayjs";
 import { useMutation, useQueryClient } from "react-query";
 import axiosInstance from "../utilities/AxiosIntance";
-import { SubmittingBtn, ErrorBtn, SuccessBtn } from "./StepSubmitButton";
+import {
+  SubmittingBtn,
+  ErrorBtn,
+  SuccessBtn,
+} from "../subcomponents/StepSubmitButton";
 
 const QuickSubmitBtn = (props) => {
   const submitData = {
