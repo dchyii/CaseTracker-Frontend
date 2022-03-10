@@ -30,6 +30,7 @@ const Signin = (props) => {
     validationSchema: LOG_IN_SCHEMA,
     onSubmit: async (values) => {
       console.log(JSON.stringify(values));
+      setMessage("Signing in...");
       try {
         const serverResponse = await axios({
           method: "post",
@@ -74,7 +75,13 @@ const Signin = (props) => {
               onBlur={formik.handleBlur}
               type="password"
             />
-            <p className="text-red-500">{message}</p>
+            <div className="h-6">
+              {message === "Signing in..." ? (
+                <p className="text-primary">{message}</p>
+              ) : (
+                <p className="text-error">{message}</p>
+              )}
+            </div>
             <button
               className="mt-8 text-base bg-black disabled:bg-gray-200 active:bg-gray-900 focus:outline-none text-white rounded px-4 py-1"
               type="submit"
