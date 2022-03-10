@@ -12,9 +12,9 @@ const DashboardSummary = (props) => {
   return (
     <div className="stats shadow lg:w-10/12 mx-auto my-5 bg-background text-primary">
       <div className="stat place-items-center">
-        <div className="stat-value">{capsFirstLetter(user.firstName)}</div>
-        <div className="stat-title">{capsFirstLetter(user.appointment)}</div>
-        <div className="stat-title">{capsFirstLetter(user.domain)}</div>
+        <div className="stat-value">{capsFirstLetter(user?.firstName)}</div>
+        <div className="stat-title">{capsFirstLetter(user?.appointment)}</div>
+        <div className="stat-title">{capsFirstLetter(user?.domain)}</div>
       </div>
 
       <div className="stat place-items-center">
