@@ -4,9 +4,12 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "react-query";
 import axiosInstance from "../utilities/AxiosIntance";
+import { useNavigate } from "react-router-dom";
+import { SubmittingBtn } from "../subcomponents/StepSubmitButton";
 
 const NewStepsDetails = (props) => {
   const user = useContext(UserContext);
+  const navigate = useNavigate();
   const caseDetails = props.caseDetails;
   const applicableStages = props.applicableStages;
   const [steps, setSteps] = useState([]);
@@ -190,19 +193,21 @@ const NewStepsDetails = (props) => {
         );
         console.log("return:", submittedCase);
         if (submittedCase.status === 201) {
+          const tracker = [];
           const newSteps = sortedSteps.map(async (step) => {
             step = { ...step, case: submittedCase.data.id };
             console.log("submitted Step: ", step);
-            let tracker = 0;
             try {
               const submittedStep = await axiosInstance.post(
                 "/api/steps/",
                 step
               );
               if (submittedStep.status === 201) {
-                tracker += 1;
-                if (tracker === newSteps.length) {
+                tracker.push(submittedStep.data);
+                console.log("tracker:", tracker);
+                if (tracker.length === newSteps.length) {
                   setIsSubmitting(false);
+                  navigate("/");
                 }
               }
             } catch (error) {
@@ -500,6 +505,9 @@ const NewStepsDetails = (props) => {
           </button>
         </div>
       </form>
+      <div className={`absolute mr-16 right-0 ${isSubmitting ? "" : "hidden"}`}>
+        <SubmittingBtn />
+      </div>
     </div>
   );
 };
