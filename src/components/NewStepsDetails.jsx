@@ -14,8 +14,8 @@ const NewStepsDetails = (props) => {
 
   const planningBasicSteps = [
     {
-      stage: "planning",
-      step: "drafting",
+      stage: "1. planning",
+      step: "1. drafting",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -23,8 +23,8 @@ const NewStepsDetails = (props) => {
       stepName: "aplanningdrafter",
     },
     {
-      stage: "planning",
-      step: "completed",
+      stage: "1. planning",
+      step: "5. completed",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -35,8 +35,8 @@ const NewStepsDetails = (props) => {
 
   const biddingBasicSteps = [
     {
-      stage: "bidding",
-      step: "drafting",
+      stage: "2. bidding",
+      step: "1. drafting",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -44,8 +44,8 @@ const NewStepsDetails = (props) => {
       stepName: "fbiddingdrafter",
     },
     {
-      stage: "bidding",
-      step: "completed",
+      stage: "2. bidding",
+      step: "5. completed",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -56,8 +56,8 @@ const NewStepsDetails = (props) => {
 
   const approvalBasicSteps = [
     {
-      stage: "approval",
-      step: "drafting",
+      stage: "3. approval",
+      step: "1. drafting",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -65,8 +65,8 @@ const NewStepsDetails = (props) => {
       stepName: "kapprovaldrafter",
     },
     {
-      stage: "approval",
-      step: "completed",
+      stage: "3. approval",
+      step: "5. completed",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -77,8 +77,8 @@ const NewStepsDetails = (props) => {
 
   const contractingBasicSteps = [
     {
-      stage: "contracting",
-      step: "drafting",
+      stage: "4. contracting",
+      step: "1. drafting",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -86,8 +86,8 @@ const NewStepsDetails = (props) => {
       stepName: "pcontractingdrafter",
     },
     {
-      stage: "contracting",
-      step: "completed",
+      stage: "4. contracting",
+      step: "5. completed",
       completed_date: null,
       case: 0,
       staffer: user.user_id,
@@ -95,20 +95,6 @@ const NewStepsDetails = (props) => {
       stepName: "tcontractingCompleted",
     },
   ];
-
-  useEffect(() => {
-    const tempArr = contractingBasicSteps;
-    if (applicableStages.planning === true) {
-      tempArr.concat(planningBasicSteps);
-    }
-    if (applicableStages.bidding === true) {
-      tempArr.concat(biddingBasicSteps);
-    }
-    if (applicableStages.approval === true) {
-      tempArr.concat(approvalBasicSteps);
-    }
-    setSteps(tempArr);
-  }, []);
 
   // track form update //
   const addStep = (stage, step, res_party, step_name) => {
@@ -166,6 +152,7 @@ const NewStepsDetails = (props) => {
   const formik = useFormik({
     initialValues: { ...initialFormValues },
     onSubmit: async () => {
+      setIsSubmitting(true);
       const compare = (a, b) => {
         if (a.stepName < b.stepName) {
           return -1;
@@ -175,6 +162,8 @@ const NewStepsDetails = (props) => {
       };
       const allSteps = (steps) => {
         const stepsArr = steps;
+        steps.push(contractingBasicSteps[0]);
+        steps.push(contractingBasicSteps[1]);
         if (applicableStages.planning === true) {
           steps.push(planningBasicSteps[0]);
           steps.push(planningBasicSteps[1]);
@@ -204,15 +193,43 @@ const NewStepsDetails = (props) => {
           const newSteps = sortedSteps.map(async (step) => {
             step = { ...step, case: submittedCase.data.id };
             console.log("submitted Step: ", step);
+            let tracker = 0;
             try {
               const submittedStep = await axiosInstance.post(
                 "/api/steps/",
                 step
               );
+              if (submittedStep.status === 201) {
+                tracker += 1;
+                if (tracker === newSteps.length) {
+                  setIsSubmitting(false);
+                }
+              }
             } catch (error) {
               console.log(error);
             }
           });
+          // let i = 0;
+          // while (i < newSteps.length) {
+          //   try {
+          //     console.log("current submit: ", newSteps[i]);
+          //     const submittedStep = await axiosInstance.post(
+          //       "/api/steps/",
+          //       newSteps[i]
+          //     );
+          //     if (submittedStep.status === 201) {
+          //       if (i === newSteps.length) {
+          //         setIsSubmitting(false);
+          //         i += 1;
+          //       } else {
+          //         i += 1;
+          //       }
+          //     }
+          //   } catch (error) {
+          //     console.log(error);
+          //     break;
+          //   }
+          // }
         }
       } catch (error) {
         console.log(error);
@@ -230,8 +247,8 @@ const NewStepsDetails = (props) => {
         name="bplanningVetter"
         onChange={(value) =>
           addStep(
-            "planning",
-            "vetting",
+            "1. planning",
+            "2. vetting",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -247,8 +264,8 @@ const NewStepsDetails = (props) => {
         name="cplanningSupport1"
         onChange={(value) =>
           addStep(
-            "planning",
-            "support1",
+            "1. planning",
+            "3. support1",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -264,8 +281,8 @@ const NewStepsDetails = (props) => {
         name="dplanningSupport2"
         onChange={(value) =>
           addStep(
-            "planning",
-            "support2",
+            "1. planning",
+            "4. support2",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -288,8 +305,8 @@ const NewStepsDetails = (props) => {
         name="gbiddingVetter"
         onChange={(value) =>
           addStep(
-            "bidding",
-            "vetting",
+            "2. bidding",
+            "2. vetting",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -305,8 +322,8 @@ const NewStepsDetails = (props) => {
         name="hbiddingSupport1"
         onChange={(value) =>
           addStep(
-            "bidding",
-            "support1",
+            "2. bidding",
+            "3. support1",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -322,8 +339,8 @@ const NewStepsDetails = (props) => {
         name="ibiddingSupport2"
         onChange={(value) =>
           addStep(
-            "bidding",
-            "support2",
+            "2. bidding",
+            "4. support2",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -346,8 +363,8 @@ const NewStepsDetails = (props) => {
         name="lapprovalVetter"
         onChange={(value) =>
           addStep(
-            "approval",
-            "vetting",
+            "3. approval",
+            "2. vetting",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -363,8 +380,8 @@ const NewStepsDetails = (props) => {
         name="mapprovalSupport1"
         onChange={(value) =>
           addStep(
-            "approval",
-            "support1",
+            "3. approval",
+            "3. support1",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -380,8 +397,8 @@ const NewStepsDetails = (props) => {
         name="napprovalSupport2"
         onChange={(value) =>
           addStep(
-            "approval",
-            "support2",
+            "3. approval",
+            "4. support2",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -404,8 +421,8 @@ const NewStepsDetails = (props) => {
         name="qcontractingVetter"
         onChange={(value) =>
           addStep(
-            "contracting",
-            "vetting",
+            "4. contracting",
+            "2. vetting",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -421,8 +438,8 @@ const NewStepsDetails = (props) => {
         name="rcontractingSupport1"
         onChange={(value) =>
           addStep(
-            "contracting",
-            "support1",
+            "4. contracting",
+            "3. support1",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
@@ -438,8 +455,8 @@ const NewStepsDetails = (props) => {
         name="scontractingSupport2"
         onChange={(value) =>
           addStep(
-            "contracting",
-            "support2",
+            "4. contracting",
+            "4. support2",
             value.nativeEvent.target.value,
             value.nativeEvent.target.name
           )
