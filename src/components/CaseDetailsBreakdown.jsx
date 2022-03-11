@@ -11,7 +11,7 @@ const CaseDetailsBreakdown = (props) => {
     ? JSON.parse(localStorage.getItem("teammates"))
     : [];
 
-  console.log(props.details);
+  // console.log(props.details);
 
   // UI Controller //
   const expandBtn = isFocused ? (
