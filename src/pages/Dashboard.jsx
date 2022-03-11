@@ -42,7 +42,7 @@ const Dashboard = () => {
     );
     const currentStage = item.steps[currentStageIndex].stage;
     const currentResParty = item.steps[currentStageIndex].res_party;
-    const deadline = currentStage + "_deadline";
+    const deadline = currentStage.substring(3) + "_deadline";
     const currentDeadline = item[deadline];
     item = {
       ...item,
@@ -52,6 +52,8 @@ const Dashboard = () => {
     };
     return item;
   });
+
+  // console.log(allUserCases);
 
   // filter for current user cases //
   const currentCasesUnsorted = allUserCases?.filter((item) => {

@@ -12,6 +12,7 @@ import QuickSubmitBtn from "./QuickSubmitBtn";
 
 const CaseDetails = (props) => {
   const [isFocused, setIsFocused] = useState(false);
+  // console.log(props.details);
 
   // Next Step Details //
   const currentStepIndex = props?.details.steps.findIndex(
@@ -23,19 +24,19 @@ const CaseDetails = (props) => {
 
   // Stages Details //
   const planning = props?.details?.steps.filter(
-    (step) => step?.stage === "planning"
+    (step) => step?.stage === "1. planning"
   );
 
   const bidding = props?.details?.steps.filter(
-    (step) => step.stage === "bidding"
+    (step) => step.stage === "2. bidding"
   );
 
   const approval = props?.details?.steps.filter(
-    (step) => step?.stage === "approval"
+    (step) => step?.stage === "3. approval"
   );
 
   const contracting = props?.details?.steps.filter(
-    (step) => step?.stage === "contracting"
+    (step) => step?.stage === "4. contracting"
   );
 
   // UI Controller //
@@ -54,11 +55,11 @@ const CaseDetails = (props) => {
   );
 
   const submitBtnText = {
-    drafting: "Submitted",
-    vetting: "Vetted",
-    support1: "Supported",
-    support2: "Supported",
-    completed: "Completed",
+    "1. drafting": "Submitted",
+    "2. vetting": "Vetted",
+    "3. support1": "Supported",
+    "4. support2": "Supported",
+    "5. completed": "Completed",
   };
 
   // Render //
