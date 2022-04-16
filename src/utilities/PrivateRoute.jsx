@@ -2,7 +2,7 @@ import { Outlet, Route } from "react-router-dom";
 import { useState, useEffect, createContext, useContext } from "react";
 
 import React from "react";
-import Signin from "../components/Signin";
+import Signin2 from "../components/Signin2";
 import Sidebar from "../components/Sidebar";
 import jwtDecode from "jwt-decode";
 import dayjs from "dayjs";
@@ -77,7 +77,7 @@ const PrivateRoute = ({ children, ...rest }) => {
       <PrivateComponent />
     </UserContext.Provider>
   ) : (
-    <Signin state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
+    <Signin2 state={[isSignedIn, setIsSignedIn]} user={[user, setUser]} />
   );
 };
 
