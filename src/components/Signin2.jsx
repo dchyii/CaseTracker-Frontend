@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import SSOButton from "../subcomponents/SSOButton";
 
 const Signin2 = (props) => {
   const [isSignedIn, setIsSignedIn] = props.state;
@@ -14,18 +15,35 @@ const Signin2 = (props) => {
             Welcome to <br /> CaseTrackerII
           </h1>
           <p className="py-6">Sign in as:</p>
-          <button className="btn btn-wide m-3 bg-secondary text-white hover:text-slate-800 border-none hover:bg-success">
-            Staff Aden
-          </button>
-          <button className="btn btn-wide m-3 bg-secondary text-white hover:text-slate-800 border-none hover:bg-success">
-            Manager Cheryl
-          </button>
-          <button className="btn btn-wide m-3 bg-secondary text-white hover:text-slate-800 border-none hover:bg-success">
-            Deputy Director Denise
-          </button>
-          <button className="btn btn-wide m-3 bg-secondary text-white hover:text-slate-800 border-none hover:bg-success">
-            Director Zack
-          </button>
+          <div className="grid grid-cols-1 xl:grid-cols-2">
+            <SSOButton
+              role="staff"
+              name="Staff Aden"
+              setIsSignedIn={setIsSignedIn}
+              setUser={setUser}
+            />
+
+            <SSOButton
+              role="manager"
+              name="Manager Cheryl"
+              setIsSignedIn={setIsSignedIn}
+              setUser={setUser}
+            />
+
+            <SSOButton
+              role="dd"
+              name="Deputy Director Denise"
+              setIsSignedIn={setIsSignedIn}
+              setUser={setUser}
+            />
+
+            <SSOButton
+              role="dir"
+              name="Director Zack"
+              setIsSignedIn={setIsSignedIn}
+              setUser={setUser}
+            />
+          </div>
         </div>
       </div>
     </div>
